@@ -1,7 +1,9 @@
 package com.example.onlinestorebackend.controllers;
 
 import com.example.onlinestorebackend.exceptions.SubCategoryNotFoundException;
+import com.example.onlinestorebackend.models.Category;
 import com.example.onlinestorebackend.models.SubCategory;
+import com.example.onlinestorebackend.services.CategoryService;
 import com.example.onlinestorebackend.services.SubCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class SubCategoryController {
     @Autowired
     private SubCategoryService subCategoryService;
-
+    @Autowired
+    private CategoryService categoryService;
     @GetMapping()
     public String showSubCategoryListPage(Model model, @ModelAttribute("message") String message,
                                        @ModelAttribute("messageType") String messageType) {
@@ -61,13 +64,13 @@ public class SubCategoryController {
     @PostMapping
     public String createSubCategory(SubCategory subCategory, RedirectAttributes redirectAttributes) {
         try {
-            SubCategory searchSubCategory = subCategoryService.findSubCategoryById(subCategory.getId());
-            redirectAttributes.addFlashAttribute("message", String.format("Sub category(%d) already exists!", subCategory.getId()));
+            SubCategory searchSubCategory = subCategoryService.findSubCategoryByName(subCategory.getName());
+            redirectAttributes.addFlashAttribute("message", String.format("Sub category(%s) already exists!", subCategory.getName()));
             redirectAttributes.addFlashAttribute("messageType", "error");
             return "redirect:/category/subcategory/create-subcategory";
         } catch (SubCategoryNotFoundException e) {
             subCategoryService.createSubCategory(subCategory);
-            redirectAttributes.addFlashAttribute("message", String.format("Sub category(%d) has been created successfully!", subCategory.getId()));
+            redirectAttributes.addFlashAttribute("message", String.format("Sub category(%s) has been created successfully!", subCategory.getName()));
             redirectAttributes.addFlashAttribute("messageType", "success");
             return "redirect:/subcategory";
         }

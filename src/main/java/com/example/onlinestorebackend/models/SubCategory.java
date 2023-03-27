@@ -25,6 +25,7 @@ public class SubCategory extends Auditable<String> implements Serializable {
 
     private boolean isActive;
 
+    //QUESTION ABOUT ONE TO MANY
     @OneToOne(cascade = CascadeType.MERGE)
     private Category category;
 

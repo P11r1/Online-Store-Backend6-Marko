@@ -65,13 +65,13 @@ public class CategoryController {
     @PostMapping
     public String createCategory(Category category, RedirectAttributes redirectAttributes) {
         try {
-            Category searchCategory = categoryService.findCategoryById(category.getId());
-            redirectAttributes.addFlashAttribute("message", String.format("Category(%s) already exists!", category.getId()));
+            Category searchCategory = categoryService.findCategoryByName(category.getName());
+            redirectAttributes.addFlashAttribute("message", String.format("Category(%s) already exists!", category.getName()));
             redirectAttributes.addFlashAttribute("messageType", "error");
             return "redirect:/category/create-category";
         } catch (CategoryNotFoundException e) {
             categoryService.createCategory(category);
-            redirectAttributes.addFlashAttribute("message", String.format("Category(%s) has been created successfully!", category.getId()));
+            redirectAttributes.addFlashAttribute("message", String.format("Category(%s) has been created successfully!", category.getName()));
             redirectAttributes.addFlashAttribute("messageType", "success");
             return "redirect:/category";
         }

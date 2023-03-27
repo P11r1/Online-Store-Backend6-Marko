@@ -23,12 +23,13 @@
         <div class="alert alert-info" role="alert" th:if="${subcategories.size() == 0}">
             No products found!
         </div>
-        <a class="btn btn-success" href="/category/create" role="button">Add Sub Category</a>
+        <a class="btn btn-success" href="/subcategory/create" role="button">Add Sub Category</a>
         <br/>
         <table class="table table-dark" th:if="${subcategories.size() > 0}">
             <thead>
             <th scope="col">#</th>
             <th scope="col">Name</th>
+            <th scope="col">Parent Category</th>
             <th scope="col">Actions</th>
             </thead>
             <tbody>
@@ -39,6 +40,7 @@
                     </a>
                 </th>
                 <td th:text="${subcategory.name}"></td>
+                <td th:text="${subcategory.getCategory().id}"></td>
                 <td>
                     <a class="btn btn-warning" role="button" th:href="@{/category/subcategory/update/{id}(id=${subcategory.id})}" th:if="${subcategory.isActive()}">
                         <i class="bi bi-pen"></i>

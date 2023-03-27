@@ -17,7 +17,7 @@
             <span th:text="${message}"></span>
         </div>
 
-        <form action="name" th:action="@{/category}" method="post" th:object="${category}">
+        <form action="#" th:action="@{/category}" method="post" th:object="${category}">
             <div class="input-group">
                 <span class="input-group-text">Name</span>
                 <input type="text" aria-label="Name" class="form-control" th:field="*{name}" required>
