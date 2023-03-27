@@ -33,20 +33,20 @@
             <tbody>
             <tr th:each="category: ${categories}">
                 <th scope="row">
-                    <a href="#" class="text-decoration-none" th:href="@{/category/{name}(id=${category.id})}">
+                    <a href="#" class="text-decoration-none" th:href="@{/category/{id}(id=${category.id})}">
                         <span th:text="${category.id}"></span>
                     </a>
                 </th>
                 <td th:text="${category.name}"></td>
                 <td>
-                    <a class="btn btn-warning" role="button" th:href="@{/category/update/{name}(name=${category.name})}" th:if="${category.isActive()}">
+                    <a class="btn btn-warning" role="button" th:href="@{/category/update/{id}(id=${category.id})}" th:if="${category.isActive()}">
                         <i class="bi bi-pen"></i>
                     </a>
 
-                    <a class="btn btn-danger" role="button" th:href="@{/category/delete/{name}(name=${category.name})}" th:if="${category.isActive()}">
+                    <a class="btn btn-danger" role="button" th:href="@{/category/delete/{id}(id=${category.id})}" th:if="${category.isActive()}">
                         <i class="bi bi-trash2-fill"></i>
                     </a>
-                    <a class="btn btn-success" role="button" th:href="@{/category/restore/{name}(name=${category.name})}"
+                    <a class="btn btn-success" role="button" th:href="@{/category/restore/{id}(id=${category.id})}"
                        th:if="${!category.isActive()}">
                         <i class="bi bi-arrow-counterclockwise"></i>
                     </a>

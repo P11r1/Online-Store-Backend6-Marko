@@ -46,6 +46,18 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Category findCategoryById(Long id) throws CategoryNotFoundException {
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+
+        if (optionalCategory.isEmpty()) {
+            throw new CategoryNotFoundException(id);
+        }
+
+        return optionalCategory.get();
+    }
+
+
+    @Override
     public List<Category> findAllCategories() {
         return categoryRepository.findAll();
     }
@@ -63,6 +75,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public void deleteCategoryById(Long id) throws CategoryNotFoundException, SubCategoryNotFoundException {
+        Category category = findCategoryById(id);
+        category.setActive(false);
+        categoryRepository.saveAndFlush(category);
+
+        for (SubCategory subCategory : subCategoryService.findAllSubCategoriesByCategory(category)) {
+            subCategoryService.deleteSubCategoryById(subCategory.getId());
+        }
+    }
+
+    @Override
     public void restoreCategoryByName(String name) throws CategoryNotFoundException, SubCategoryNotFoundException {
         Category category = findCategoryByName(name);
         category.setActive(true);
@@ -74,8 +97,19 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public void restoreCategoryById(Long id) throws CategoryNotFoundException, SubCategoryNotFoundException {
+        Category category = findCategoryById(id);
+        category.setActive(true);
+        categoryRepository.saveAndFlush(category);
+
+        for (SubCategory subCategory : subCategoryService.findAllSubCategoriesByCategory(category)) {
+            subCategoryService.restoreSubCategoryById(subCategory.getId());
+        }
+    }
+
+    @Override
     public void updateCategory(Category category) throws CategoryNotFoundException {
-        if (findCategoryByName(category.getName()) != null) {
+        if (findCategoryById(category.getId()) != null) {
             categoryRepository.saveAndFlush(category);
         }
     }

@@ -31,11 +31,11 @@ public class CategoryController {
         return "category/list-category";
     }
 
-    @GetMapping("/delete/{name}")
-    public String deleteCategory(@PathVariable String name, RedirectAttributes redirectAttributes) {
+    @GetMapping("/delete/{id}")
+    public String deleteCategory(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
-            categoryService.deleteCategoryByName(name);
-            redirectAttributes.addFlashAttribute("message", String.format("Category(name=%s) deleted successfully!", name));
+            categoryService.deleteCategoryById(id);
+            redirectAttributes.addFlashAttribute("message", String.format("Category(id=%d) deleted successfully!", id));
             redirectAttributes.addFlashAttribute("messageType", "success");
             return "redirect:/category";
         } catch (CategoryNotFoundException | SubCategoryNotFoundException e) {
@@ -43,11 +43,11 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/restore/{name}")
-    public String restoreCategory(@PathVariable String name, RedirectAttributes redirectAttributes) {
+    @GetMapping("/restore/{id}")
+    public String restoreCategory(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
-            categoryService.restoreCategoryByName(name);
-            redirectAttributes.addFlashAttribute("message", String.format("Category(name=%s) restored successfully!", name));
+            categoryService.restoreCategoryById(id);
+            redirectAttributes.addFlashAttribute("message", String.format("Category(id=%d) restored successfully!", id));
             redirectAttributes.addFlashAttribute("messageType", "success");
             return "redirect:/category";
         } catch (CategoryNotFoundException | SubCategoryNotFoundException e) {
@@ -65,25 +65,25 @@ public class CategoryController {
     @PostMapping
     public String createCategory(Category category, RedirectAttributes redirectAttributes) {
         try {
-            Category searchCategory = categoryService.findCategoryByName(category.getName());
-            redirectAttributes.addFlashAttribute("message", String.format("Category(%s) already exists!", category.getName()));
+            Category searchCategory = categoryService.findCategoryById(category.getId());
+            redirectAttributes.addFlashAttribute("message", String.format("Category(%s) already exists!", category.getId()));
             redirectAttributes.addFlashAttribute("messageType", "error");
             return "redirect:/category/create-category";
         } catch (CategoryNotFoundException e) {
             categoryService.createCategory(category);
-            redirectAttributes.addFlashAttribute("message", String.format("Category(%s) has been created successfully!", category.getName()));
+            redirectAttributes.addFlashAttribute("message", String.format("Category(%s) has been created successfully!", category.getId()));
             redirectAttributes.addFlashAttribute("messageType", "success");
             return "redirect:/category";
         }
     }
 
-    @GetMapping("/update/{name}")
-    public String showUpdateCategoryPage(@PathVariable String name, RedirectAttributes redirectAttributes,
+    @GetMapping("/update/{id}")
+    public String showUpdateCategoryPage(@PathVariable Long id, RedirectAttributes redirectAttributes,
                                          @RequestParam(value = "category", required = false) Category category,
                                          Model model) {
         if (category == null) {
             try {
-                model.addAttribute("category", categoryService.findCategoryByName(name));
+                model.addAttribute("category", categoryService.findCategoryById(id));
             } catch (CategoryNotFoundException e) {
                 return handleException(redirectAttributes, e);
             }
@@ -95,7 +95,7 @@ public class CategoryController {
     public String updateCategory(Category category, RedirectAttributes redirectAttributes) {
         try {
             categoryService.updateCategory(category);
-            redirectAttributes.addFlashAttribute("message", String.format("Category(name=%s) has been updated successfully!", category.getName()));
+            redirectAttributes.addFlashAttribute("message", String.format("Category(id=%d) has been updated successfully!", category.getId()));
             redirectAttributes.addFlashAttribute("messageType", "success");
             return "redirect:/category";
         } catch (CategoryNotFoundException e) {
