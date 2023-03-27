@@ -1,6 +1,7 @@
 package com.example.onlinestorebackend.services;
 
 import com.example.onlinestorebackend.exceptions.CategoryNotFoundException;
+import com.example.onlinestorebackend.exceptions.SubCategoryNotFoundException;
 import com.example.onlinestorebackend.models.Category;
 
 import java.util.List;
@@ -37,12 +38,19 @@ public interface CategoryService {
      *
      * @param name Category name
      */
-    void deleteCategoryByName(String name) throws CategoryNotFoundException;
+    void deleteCategoryByName(String name) throws CategoryNotFoundException, SubCategoryNotFoundException;
 
     /**
      * To restore a Category by name
      *
      * @param name Category name
      */
-    void restoreCategoryByName(String name) throws CategoryNotFoundException;
+    void restoreCategoryByName(String name) throws CategoryNotFoundException, SubCategoryNotFoundException;
+
+    /**
+     * To update Category
+     *
+     * @param category Category
+     */
+    void updateCategory(Category category) throws CategoryNotFoundException;
 }

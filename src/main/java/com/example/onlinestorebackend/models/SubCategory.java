@@ -21,6 +21,10 @@ public class SubCategory extends Auditable<String> implements Serializable {
     @GeneratedValue
     private Long id;
 
+    private String name;
+
+    private boolean isActive;
+
     @OneToOne(cascade = CascadeType.MERGE)
     private Category category;
 

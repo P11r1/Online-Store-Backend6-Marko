@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,6 +23,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void createProduct(Product product) {
+        product.setActive(true);
         productRepository.save(product);
     }
 
@@ -36,6 +38,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> findAllProducts() {
+        return productRepository.findAll();
+    }
+
+    @Override
     public void updateProduct(Product product) throws ProductNotFoundException {
 
         if (findProductByTitle(product.getTitle()) !=null) {
@@ -47,6 +54,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProductByTitle(String title) throws ProductNotFoundException {
         Product product = findProductByTitle(title);
+        product.setActive(false);
+        productRepository.saveAndFlush(product);
+    }
+
+    @Override
+    public void restoreProductByTitle(String title) throws ProductNotFoundException {
+        Product product = findProductByTitle(title);
+        product.setActive(true);
         productRepository.saveAndFlush(product);
     }
 }
